@@ -54,6 +54,23 @@ class HomeSemesterState extends State<HomeSemester> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        backgroundColor: Colors.teal,
+        child: Padding(
+          padding: const EdgeInsets.all(80.0),
+          child: Container(
+            child: Column(
+              children: [
+                Card(
+                    color: Colors.red,
+                    child: Container(
+                        padding: EdgeInsets.all(40),
+                        child: Text("BY PAUL ANDRE"))),
+              ],
+            ),
+          ),
+        ),
+      ),
       backgroundColor: Colors.tealAccent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -76,11 +93,12 @@ class HomeSemesterState extends State<HomeSemester> {
               ),
             ),
           ),
-          Container(
-              padding: const EdgeInsets.all(8),
-              height: 700,
-              width: double.maxFinite,
-              child: SchedLister())
+          Expanded(
+            child: Container(
+                padding: const EdgeInsets.all(8),
+                width: double.maxFinite,
+                child: SchedLister()),
+          )
         ],
       ),
     );
