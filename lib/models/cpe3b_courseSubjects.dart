@@ -4,6 +4,7 @@ class Bscpe3b {
   static Subject CPE311 = Subject(
       subjectCode: "CPE 311",
       subjectName: "LOGIC CIRCUITS AND DESIGNS",
+      classRoomUrl: "https://classroom.google.com/u/3/c/NjE4OTMyMTA1MTMx",
       instructor: "ROSELLE P. CIMAGALA",
       timeslots: DaysWeekMap(scheds: {
         WeekDay.MONDAY: [
@@ -24,6 +25,7 @@ class Bscpe3b {
   static Subject CPE312 = Subject(
       subjectCode: "CPE 312",
       subjectName: "OPERATING SYSTEM",
+      classRoomUrl: "https://classroom.google.com/u/3/c/NjE4OTMxMzUzODUy",
       instructor: "ROSELLE P. CIMAGALA",
       timeslots: DaysWeekMap(scheds: {
         WeekDay.TUESDAY: [
@@ -41,6 +43,7 @@ class Bscpe3b {
 
   static Subject CPE313 = Subject(
       subjectCode: "CPE 313",
+      classRoomUrl: "",
       subjectName: "DATA AND DIGITAL COMMUNICATIONS",
       instructor: "EDWARD C. ANUTA",
       timeslots: DaysWeekMap(scheds: {
@@ -58,6 +61,7 @@ class Bscpe3b {
       }));
   static Subject CPE314 = Subject(
       subjectCode: "CPE 314",
+      classRoomUrl: "https://classroom.google.com/u/3/c/NTIzOTI1MzE4Mjcx",
       subjectName: "INTRODUCTION TO HDL",
       instructor: "GIEFORD _. TAGA-AN",
       timeslots: DaysWeekMap(scheds: {
@@ -76,6 +80,8 @@ class Bscpe3b {
   static Subject CPE315 = Subject(
       subjectCode: "CPE 315",
       subjectName: "FEEDBACK AND CONTROL SYSTEM",
+      classRoomUrl:
+          "https://classroom.google.com/u/3/c/NjE4Mjg1OTg4MDI3?cjc=gfdqm6r&fbclid=IwAR1o1wxiuiRdFJ36iWRc8z7xqUGXFYe4dnqT944kHapsmZ1dKukLlPqbXtA",
       instructor: "JERALYN G. ALAGON",
       timeslots: DaysWeekMap(scheds: {
         WeekDay.MONDAY: [
@@ -93,6 +99,7 @@ class Bscpe3b {
   static Subject CPE316 = Subject(
       subjectCode: "CPE 316",
       subjectName: "FUNDAMENTALS OF MIXED SIGNALS AND PROCESSORS",
+      classRoomUrl: "https://classroom.google.com/u/3/c/NjIwNjAzNzA2MTE2",
       instructor: "GIEFORD _. TAGA-AN",
       timeslots: DaysWeekMap(scheds: {
         WeekDay.THURSDAY: [
@@ -107,6 +114,7 @@ class Bscpe3b {
   static Subject CPE317 = Subject(
       subjectCode: "CPE 317",
       subjectName: "COMPUTER ENGINEERING DRAFTING AND DESIGN",
+      classRoomUrl: "https://classroom.google.com/u/3/c/NjE5OTY4ODkwNzIx",
       instructor: "CARL _. CAPUNO",
       timeslots: DaysWeekMap(scheds: {
         WeekDay.MONDAY: [
@@ -124,6 +132,7 @@ class Bscpe3b {
   static Subject CPE318 = Subject(
       subjectCode: "CPE 318",
       subjectName: "INTRODUCTION TO ROBOTICS",
+      classRoomUrl: "",
       instructor: "JULIUS C. CASTRO",
       timeslots: DaysWeekMap(scheds: {
         WeekDay.THURSDAY: [
@@ -141,6 +150,7 @@ class Bscpe3b {
   static Subject CPE319 = Subject(
       subjectCode: "CPE 319",
       subjectName: "ENERGY CONVERSION",
+      classRoomUrl: "https://classroom.google.com/u/3/c/NjE5MTY5NzM3OTMz",
       instructor: "BRET JOHN _. DARATO",
       timeslots: DaysWeekMap(scheds: {
         WeekDay.MONDAY: [
@@ -158,6 +168,7 @@ class Bscpe3b {
   static Subject TE01 = Subject(
       subjectCode: "TE 01",
       subjectName: "COGNATE/ELECTIVE COURSE 1",
+      classRoomUrl: "https://classroom.google.com/u/3/c/NjE5Mjc1NzE3MTU0",
       instructor: "CYMONNE KITT _. JAPSON",
       timeslots: DaysWeekMap(scheds: {
         WeekDay.MONDAY: [

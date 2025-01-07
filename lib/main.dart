@@ -3,6 +3,8 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:myapp_536_semlister/models/course_subject.dart';
 import 'package:myapp_536_semlister/models/cpe3b_courseSubjects.dart';
+import 'package:external_app_launcher/external_app_launcher.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(const MainHome());
 
@@ -51,6 +53,7 @@ class HomeSemesterState extends State<HomeSemester> {
     Bscpe3b.CPE319,
     Bscpe3b.TE01
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,8 +67,8 @@ class HomeSemesterState extends State<HomeSemester> {
                 Card(
                     color: Colors.red,
                     child: Container(
-                        padding: EdgeInsets.all(40),
-                        child: Text("BY PAUL ANDRE"))),
+                        padding: const EdgeInsets.all(40),
+                        child: const Text("BY PAUL ANDRE"))),
               ],
             ),
           ),
@@ -115,8 +118,10 @@ class HomeSemesterState extends State<HomeSemester> {
           children: [
             Card(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
-              ),
+                  borderRadius: BorderRadius.circular(25),
+                  side: BorderSide(
+                      color: Colors.yellowAccent,
+                      width: (checkIfDateIsToday(index) ? 5 : 0))),
               color: Colors.pink,
               child: Container(
                 padding: const EdgeInsets.all(8),
@@ -133,7 +138,7 @@ class HomeSemesterState extends State<HomeSemester> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
                         color: (checkIfDateIsToday(index))
-                            ? Colors.orange
+                            ? Colors.yellow
                             : Colors.blue.shade400,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -179,7 +184,7 @@ class SubjectLister extends StatelessWidget {
   final String daykeys;
   final bool isToday;
 
-  Color activeTimeHighlight(double start, double end) {
+  bool activeTimeHighlight(double start, double end) {
     var now = DateTime.now();
     int hour = now.hour;
     int minute = now.minute;
@@ -188,13 +193,27 @@ class SubjectLister extends StatelessWidget {
     int totalSeconds = hour * 3600 + minute * 60 + second;
     print("right now - $totalSeconds seconds == ${now}");
 
-    return (start < totalSeconds && totalSeconds < end && isToday)
-        ? Colors.greenAccent
-        : Colors.lightBlue.shade200;
+    return (start < totalSeconds && totalSeconds < end && isToday);
   }
 
   @override
   Widget build(BuildContext context) {
+    String currentActive = "";
+    Future<bool> isInstalled() async {
+      return await LaunchApp.isAppInstalled(
+          androidPackageName: 'com.google.android.apps.classroom');
+    }
+
+    void openGoogleClassroom() async {
+      // Get the Google Classroom app URI.
+      String classroomUri = 'https://classroom.google.com/';
+
+      // Try to launch the Google Classroom app.
+      await launch(classroomUri);
+    }
+
+    print("IS BROTHER INSTALLED: ${isInstalled().toString()}");
+
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       color: Colors.pinkAccent,
@@ -209,71 +228,218 @@ class SubjectLister extends StatelessWidget {
             Subject current = subjects[bindex];
             Map<WeekDay, List<TimeSlot>> timeslots = current.timeslots.scheds;
 
-            return (timeslots[day[daykeys]]!.length != 0)
+            return (timeslots[day[daykeys]]!.isNotEmpty)
                 ? Column(
                     children: [
-                      Card(
-                        color: Colors.blue.shade100,
+                      MaterialButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              width: 200,
-                              child: Text(
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.redAccent.shade700),
-                                  overflow: TextOverflow.ellipsis,
-                                  current.subjectName),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Card(
-                                  color: activeTimeHighlight(
-                                      timeslots[day[daykeys]]![0].inseconds,
-                                      timeslots[day[daykeys]]![1].inseconds),
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(20),
-                                          bottomLeft: Radius.circular(20),
-                                          topRight: Radius.circular(5),
-                                          bottomRight: Radius.circular(5))),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      timeslots[day[daykeys]]![0]
-                                          .formatHourMinute(),
-                                      style: const TextStyle(color: Colors.red),
+                        onPressed: () {
+                          showModalBottomSheet(
+                            enableDrag: true,
+                            elevation: 15,
+                            backgroundColor: Colors.transparent,
+                            context: context,
+                            builder: (context) {
+                              return Card(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Card(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        children: [
+                                          Card(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            color: Colors.pink,
+                                            child: Container(
+                                              padding: const EdgeInsets.all(10),
+                                              child: Text(
+                                                "SUBJECT NAME : ${current.subjectName}",
+                                                style: const TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          ),
+                                          Card(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            color: Colors.pink,
+                                            child: Container(
+                                              padding: const EdgeInsets.all(10),
+                                              child: Text(
+                                                "SUBJECT CODE : ${current.subjectCode}",
+                                                style: const TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Card(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            color: Colors.pink,
+                                            child: Container(
+                                              padding: const EdgeInsets.all(10),
+                                              child: Text(
+                                                "INSTRUCTOR : ${current.instructor}",
+                                                style: const TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          ),
+                                          // ElevatedButton(
+                                          //     style: const ButtonStyle(
+                                          //         backgroundColor:
+                                          //             MaterialStatePropertyAll(
+                                          //                 Colors.green)),
+                                          //     onPressed: () async {
+                                          //       await LaunchApp.openApp(
+                                          //           androidPackageName:
+                                          //               'com.google.android.apps.classroom',
+                                          //           // appStoreLink:
+                                          //           //     "https://play.google.com/store/apps/details?id=com.google.android.apps.classroom&hl=en&gl=US",
+                                          //           openStore:
+                                          //               await isInstalled());
+                                          //     },
+                                          //     child: Text("LAUNCH CLASSROOM")),
+                                          ElevatedButton(
+                                              style: const ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStatePropertyAll(
+                                                          Colors.green)),
+                                              onPressed: () async {
+                                                Uri classroomURL = Uri.parse(
+                                                    current.classRoomUrl);
+                                                if (await canLaunchUrl(
+                                                    classroomURL)) {
+                                                  launchUrl(classroomURL);
+                                                }
+                                              },
+                                              child: Text("LAUNCH CLASSROOM")),
+                                        ],
+                                      ),
+                                    ),
+                                  ));
+                            },
+                          );
+                        },
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        padding: EdgeInsets.zero,
+                        minWidth: 0,
+                        child: Card(
+                          color: Colors.blue.shade100,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              side: BorderSide(
+                                  color: Colors.greenAccent,
+                                  width: (activeTimeHighlight(
+                                          timeslots[day[daykeys]]![0].inseconds,
+                                          timeslots[day[daykeys]]![1]
+                                              .inseconds))
+                                      ? 2
+                                      : 0)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Card(
+                                    color: activeTimeHighlight(
+                                            timeslots[day[daykeys]]![0]
+                                                .inseconds,
+                                            timeslots[day[daykeys]]![1]
+                                                .inseconds)
+                                        ? Colors.greenAccent
+                                        : Colors.lightBlue.shade200,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 8.0, bottom: 8),
+                                      child: Text(
+                                        current.subjectCode,
+                                        style: const TextStyle(),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Card(
-                                  color: activeTimeHighlight(
-                                      timeslots[day[daykeys]]![0].inseconds,
-                                      timeslots[day[daykeys]]![1].inseconds),
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(5),
-                                          bottomLeft: Radius.circular(5),
-                                          topRight: Radius.circular(20),
-                                          bottomRight: Radius.circular(20))),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    width: 150,
                                     child: Text(
-                                      timeslots[day[daykeys]]![1]
-                                          .formatHourMinute(),
-                                      style: const TextStyle(
-                                          color: Colors.purpleAccent),
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.redAccent.shade700),
+                                        overflow: TextOverflow.ellipsis,
+                                        current.subjectName),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Card(
+                                    color: activeTimeHighlight(
+                                            timeslots[day[daykeys]]![0]
+                                                .inseconds,
+                                            timeslots[day[daykeys]]![1]
+                                                .inseconds)
+                                        ? Colors.greenAccent
+                                        : Colors.lightBlue.shade200,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(20),
+                                            bottomLeft: Radius.circular(20),
+                                            topRight: Radius.circular(5),
+                                            bottomRight: Radius.circular(5))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        timeslots[day[daykeys]]![0]
+                                            .formatHourMinute(),
+                                        style:
+                                            const TextStyle(color: Colors.red),
+                                      ),
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
-                          ],
+                                  Card(
+                                    color: activeTimeHighlight(
+                                            timeslots[day[daykeys]]![0]
+                                                .inseconds,
+                                            timeslots[day[daykeys]]![1]
+                                                .inseconds)
+                                        ? Colors.greenAccent
+                                        : Colors.lightBlue.shade200,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(5),
+                                            bottomLeft: Radius.circular(5),
+                                            topRight: Radius.circular(20),
+                                            bottomRight: Radius.circular(20))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        timeslots[day[daykeys]]![1]
+                                            .formatHourMinute(),
+                                        style: const TextStyle(
+                                            color: Colors.purpleAccent),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       const SizedBox(

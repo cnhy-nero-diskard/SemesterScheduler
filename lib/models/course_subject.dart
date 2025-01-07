@@ -3,12 +3,13 @@ class Subject {
   late final String subjectName;
   late final String instructor;
   late final DaysWeekMap timeslots;
-  Subject({
-    required this.subjectCode,
-    required this.subjectName,
-    required this.instructor,
-    required this.timeslots,
-  });
+  late final String classRoomUrl;
+  Subject(
+      {required this.subjectCode,
+      required this.subjectName,
+      required this.instructor,
+      required this.timeslots,
+      required this.classRoomUrl});
 }
 
 class TimeSlot {
